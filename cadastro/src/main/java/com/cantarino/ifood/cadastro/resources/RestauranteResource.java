@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -23,10 +24,14 @@ import javax.ws.rs.core.Response.Status;
 import com.cantarino.ifood.cadastro.dtos.restaurante.AddRestaurante;
 import com.cantarino.ifood.cadastro.dtos.restaurante.EditRestaurante;
 import com.cantarino.ifood.cadastro.dtos.restaurante.RestauranteDTO;
+import com.cantarino.ifood.cadastro.infra.base.violations.ConstraintViolationResponse;
 import com.cantarino.ifood.cadastro.infra.mappers.RestauranteMapper;
 import com.cantarino.ifood.cadastro.models.Restaurante;
 
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Path("/api/restaurantes")
 @Produces(MediaType.APPLICATION_JSON)
@@ -50,7 +55,9 @@ public class RestauranteResource {
 
     @POST
     @Transactional
-    public Response adicionar(AddRestaurante dto) {
+    @APIResponse(responseCode = "200", description = "Caso restaurante seja cadastrado com sucesso")
+    @APIResponse(responseCode = "400", content = @Content(schema = @Schema(allOf = ConstraintViolationResponse.class)))
+    public Response adicionar(@Valid AddRestaurante dto) {
 
         Restaurante restaurante = _mapper.toRestaurante(dto);
         restaurante.persist();
