@@ -29,11 +29,11 @@ public class RestauranteTest {
 
 
     @Test
-    @DataSet("restaurantesCenario1.yml")
+    @DataSet("restaurantes-cenario-1.yml")
     public void testGetRestaurantes()
     {
         String resultado = given()
-                .when().get("/restaurantes")
+                .when().get("/api/restaurantes")
                 .then()
                 .statusCode(Status.OK.getStatusCode())
                 .extract().asString();

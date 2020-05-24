@@ -2,9 +2,7 @@ package com.cantarino.ifood.cadastro.resources;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
@@ -21,11 +19,14 @@ import javax.ws.rs.core.MediaType;
 import com.cantarino.ifood.cadastro.models.Prato;
 import com.cantarino.ifood.cadastro.models.Restaurante;
 
-import org.hibernate.validator.constraints.pl.PESEL;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+
+
 
 @Path("/api/pratos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes (MediaType.APPLICATION_JSON)
+@Tag(name = "pratos")
 public class PratoResource {
 
     @GET
