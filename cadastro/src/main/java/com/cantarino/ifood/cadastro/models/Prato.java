@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 @Entity
-@Table(name = "localizacao")
+@Table(name = "prato")
 public class Prato  extends PanacheEntityBase {
 
     @Id
@@ -21,7 +21,7 @@ public class Prato  extends PanacheEntityBase {
 
 
     public String Nome;
-    public String descrica;
+    public String descricao;
     public BigDecimal preco;
 
     @ManyToOne
