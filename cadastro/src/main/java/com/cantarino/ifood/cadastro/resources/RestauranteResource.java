@@ -35,6 +35,9 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.security.OAuthFlows;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -54,6 +57,12 @@ public class RestauranteResource {
     RestauranteMapper  _mapper;
 
     @GET
+    @Counted(name = "qtidadeBuscaRestaurante")
+    @SimplyTimed(name = "Tempo de busca")
+    @Timed(
+        name = "tempo completo de busca"
+
+    )
     public List<RestauranteDTO> buscar() {
 
         Stream<Restaurante> restaurantes = Restaurante.streamAll();
