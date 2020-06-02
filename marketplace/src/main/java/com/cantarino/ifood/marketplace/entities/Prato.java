@@ -24,23 +24,26 @@ public class Prato {
 
     public BigDecimal preco;
 
-
-
-
     public static Multi<PratoDto> findAll(PgPool pgPool)
     {
         Uni<RowSet<Row>> preparedQuery = pgPool.preparedQuery("select * from prato");
         return unitToMulti(preparedQuery);
+    }
 
+    public static Multi<PratoDto> findAll(PgPool pgPool, Long idRestaurante)
+    {
+        Uni<RowSet<Row>> preparedQuery =
+            pgPool.preparedQuery("select * from prato where prato.restaurante_id = $1 ORDER BY nome ASC",
+                                  Tuple.of(idRestaurante));
 
+            return unitToMulti(preparedQuery);
     }
 
     private static Multi<PratoDto> unitToMulti(Uni<RowSet<Row>> queryResult) {
         return queryResult.onItem()
                 .produceMulti(set -> Multi.createFrom().items(() -> {
                     return StreamSupport.stream(set.spliterator(), false);
-                }))
-                .onItem().apply(PratoDto::from);
+                })).onItem().apply(PratoDto::from);
     }
 
 }

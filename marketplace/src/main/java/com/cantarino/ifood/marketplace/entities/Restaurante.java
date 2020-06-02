@@ -7,6 +7,9 @@ public class Restaurante {
         public String nome;
         public Localizacao localizacao ;
 
-
-
+        @Override
+        public String toString()
+        {
+           return "Restaurante [ID=" + id + ", nome=" + nome + " , Localizacao=" + localizacao;
+        }
 }

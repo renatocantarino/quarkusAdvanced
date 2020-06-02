@@ -3,7 +3,6 @@ package com.cantarino.ifood.cadastro;
 import javax.ws.rs.core.Response.Status;
 
 import org.approvaltests.Approvals;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

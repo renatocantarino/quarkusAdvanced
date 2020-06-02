@@ -15,7 +15,7 @@ services:
         POSTGRES_USER: marketplace
         POSTGRES_PASSWORD: marketplace
     ports:
-       - "5433:5433"
+      - "5433:5432"
   keycloak_ifood:
     container_name: keycloak_ifood
     image: jboss/keycloak:9.0.2
@@ -49,6 +49,19 @@ services:
     image: grafana/grafana:6.5.0
     ports:
       - 3000:3000
+
+  artemis_ifood:
+    container_name: artemis_ifood
+    image: vromero/activemq-artemis:2.11.0
+    volumes:
+      - "./activemq/activemq.xml:/conf/activemq.xml"
+    ports:
+      - "61616:61616" # broker (admin:adminactivemq)(amq:amq)
+      - "8161:8161"
+      - "5672:5672"   # web    http://boot2docker:8161/admin (admin:admin)
+    environment:
+       ARTEMIS_USERNAME: admin
+       ARTEMIS_PASSWORD: admin
 
 
 

@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -35,6 +37,10 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.security.OAuthFlows;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
+
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.metrics.annotation.Timed;
@@ -55,6 +61,10 @@ public class RestauranteResource {
 
     @Inject
     RestauranteMapper  _mapper;
+
+    @Inject
+    @Channel("restaurantes")
+    Emitter<String> emitter;
 
     @GET
     @Counted(name = "qtidadeBuscaRestaurante")
@@ -81,8 +91,12 @@ public class RestauranteResource {
         Restaurante restaurante = _mapper.toRestaurante(dto);
         restaurante.persist();
 
+        emitter.send(createJson(restaurante));
+
         return Response.status(Status.OK).build();
     }
+
+
 
     @PUT
     @Path("{id}")
@@ -113,6 +127,13 @@ public class RestauranteResource {
 
         return Response.status(Status.OK).build();
 
+    }
+
+
+
+    private String createJson(Restaurante restaurante) {
+        Jsonb create = JsonbBuilder.create();
+        return  create.toJson(restaurante);
     }
 
 }
