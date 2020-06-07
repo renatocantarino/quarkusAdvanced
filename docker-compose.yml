@@ -63,5 +63,18 @@ services:
        ARTEMIS_USERNAME: admin
        ARTEMIS_PASSWORD: admin
 
+  mongodb_ifood:
+    container_name: mongodb_ifood
+    image: aashreys/mongo-auth:latest
+    environment:
+      - AUTH=yes
+      - MONGODB_ADMIN_USER=admin
+      - MONGODB_ADMIN_PASS=admin123
+      - MONGODB_APPLICATION_DATABASE=pedidos
+      - MONGODB_APPLICATION_USER=pedido
+      - MONGODB_APPLICATION_PASS=pedido
+    ports:
+        - 27017:27017
+
 
 
