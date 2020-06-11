@@ -12,6 +12,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
+
+
 import com.cantarino.ifood.marketplace.dto.PedidoRealizadoDto;
 import com.cantarino.ifood.marketplace.dto.PratoCarrinho;
 import com.cantarino.ifood.marketplace.dto.PratoDto;
@@ -19,11 +23,11 @@ import com.cantarino.ifood.marketplace.dto.PratoPedidoDto;
 import com.cantarino.ifood.marketplace.dto.RestauranteDto;
 import com.cantarino.ifood.marketplace.entities.Prato;
 
-import org.eclipse.microprofile.reactive.messaging.Emitter;
+
 
 import io.smallrye.mutiny.Uni;
 
-import org.eclipse.microprofile.reactive.messaging.Channel;
+
 
 @Path("carrinho")
 @Produces(MediaType.APPLICATION_JSON)
@@ -73,6 +77,10 @@ public class CarrinhoResource {
         RestauranteDto restaurante = new RestauranteDto();
         restaurante.nome = "nome restaurante";
         pedido.restaurante = restaurante;
+
+        System.out.println(pedido);
+
+
         emitterPedido.send(pedido);
         return PratoCarrinho.delete(client, cliente);
     }

@@ -77,30 +77,32 @@ services:
       - 27017:27017
 
 
-  zookeeper:
-    container_name: zookeeper_container
-    image: debezium/zookeeper:1.1
-    ports:
-      - 2181:2181
-      - 2888:2888
-      - 3888:3888
   kafka:
-    container_name: kafka_container
-    image: debezium/kafka:1.1
+    image: obsidiandynamics/kafka
+    restart: "no"
     ports:
-      - 9092:9092
-    links:
-      - zookeeper
+      - "2181:2181"
+      - "9092:9092"
     environment:
-      - ZOOKEEPER_CONNECT=zookeeper:2181
+      KAFKA_LISTENERS: "INTERNAL://:29092,EXTERNAL://:9092"
+      KAFKA_ADVERTISED_LISTENERS: "INTERNAL://kafka:29092,EXTERNAL://localhost:9092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+      KAFKA_ZOOKEEPER_SESSION_TIMEOUT: "6000"
+      KAFKA_RESTART_ATTEMPTS: "10"
+      KAFKA_RESTART_DELAY: "5"
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: "0"
+
+
 
   kafdrop:
-    container_name: kafdrop_container
-    image: obsidiandynamics/kafdrop:3.24.0
-    environment:
-       KAFKA_BROKERCONNECT: kafka:9092
+    image: obsidiandynamics/kafdrop
+    restart: "no"
     ports:
-      - 9000:9000
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:29092"
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
     depends_on:
       - kafka
 
